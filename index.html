@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI@Einhorn – Arbeitsprozesse KI-gestützt gestalten</title>
+<style>
+  :root{
+    --primary:#1a5276; --primary-dark:#123a54; --accent:#148f77; --accent-light:#e8f8f5;
+    --light:#eaf2f8; --grey:#5d6d7e; --bg:#f7f9fb; --card:#ffffff;
+    --j1:#1a5276; --j2:#148f77; --j3:#b9770e;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{font-family:'Segoe UI', system-ui, -apple-system, sans-serif; background:var(--bg); color:#2c3e50; line-height:1.55;}
+  header{background:linear-gradient(135deg,var(--primary-dark),var(--primary) 60%,var(--accent)); color:#fff; padding:38px 20px 30px; text-align:center;}
+  header h1{font-size:1.9rem; margin-bottom:6px;}
+  header p{opacity:.92; max-width:860px; margin:0 auto; font-size:.98rem;}
+  .badges{margin-top:14px; display:flex; gap:8px; justify-content:center; flex-wrap:wrap;}
+  .badge{background:rgba(255,255,255,.16); border:1px solid rgba(255,255,255,.35); border-radius:999px; padding:4px 14px; font-size:.82rem;}
+  nav{position:sticky; top:0; z-index:50; background:var(--primary-dark); display:flex; justify-content:center; flex-wrap:wrap; box-shadow:0 2px 8px rgba(0,0,0,.25);}
+  nav a{color:#fff; text-decoration:none; padding:12px 18px; font-size:.9rem; transition:background .2s;}
+  nav a:hover{background:var(--accent);}
+  main{max-width:1080px; margin:0 auto; padding:28px 18px 60px;}
+  section{margin-bottom:44px;}
+  h2{color:var(--primary); font-size:1.45rem; border-bottom:3px solid var(--accent); padding-bottom:6px; margin-bottom:18px; scroll-margin-top:70px;}
+  h3{color:var(--accent); margin:16px 0 8px;}
+  p{margin-bottom:10px;}
+  .grid{display:grid; gap:16px;}
+  .grid.three{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));}
+  .card{background:var(--card); border-radius:12px; padding:18px 20px; box-shadow:0 2px 10px rgba(26,82,118,.08); border-top:4px solid var(--accent);}
+  .card h4{color:var(--primary); margin-bottom:6px;}
+  .card.company{border-top-color:var(--primary);}
+  table{width:100%; border-collapse:collapse; background:#fff; box-shadow:0 2px 10px rgba(26,82,118,.08); border-radius:10px; overflow:hidden; font-size:.88rem; margin-bottom:12px;}
+  th{background:var(--primary); color:#fff; text-align:left; padding:9px 10px;}
+  td{padding:8px 10px; border-bottom:1px solid #e4ebf0; vertical-align:top;}
+  tr:nth-child(even) td{background:#f4f8fb;}
+  tr.year td{background:var(--accent); color:#fff; font-weight:600;}
+  tr.sum td{background:var(--light); font-weight:700;}
+  .std{text-align:center; white-space:nowrap;}
+  details.ls{background:#fff; border-radius:12px; margin-bottom:14px; box-shadow:0 2px 10px rgba(26,82,118,.08); overflow:hidden; border-left:6px solid var(--accent);}
+  details.ls.j1{border-left-color:var(--j1);} details.ls.j2{border-left-color:var(--j2);} details.ls.j3{border-left-color:var(--j3);}
+  details.ls summary{cursor:pointer; padding:14px 18px; font-weight:600; color:var(--primary); display:flex; justify-content:space-between; align-items:center; gap:10px; list-style:none;}
+  details.ls summary::-webkit-details-marker{display:none;}
+  details.ls summary .meta{font-size:.78rem; color:var(--grey); font-weight:400; white-space:nowrap;}
+  details.ls summary:hover{background:var(--light);}
+  .ls-body{padding:0 18px 18px; font-size:.92rem;}
+  .ls-body h5{color:var(--accent); text-transform:uppercase; font-size:.74rem; letter-spacing:.06em; margin:14px 0 4px;}
+  .ls-body ol{margin:4px 0 4px 20px;}
+  .ls-body li{margin-bottom:6px;}
+  .ls-body .op{font-weight:700; color:var(--primary);}
+  .tools{display:flex; flex-wrap:wrap; gap:6px; margin-top:4px;}
+  .tool{background:var(--accent-light); color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:2px 10px; font-size:.76rem; font-weight:600;}
+  .hint{background:#fdf6e3; border-left:4px solid var(--j3); padding:10px 14px; border-radius:0 8px 8px 0; font-size:.86rem; margin-top:10px;}
+  .note{background:var(--accent-light); border-left:4px solid var(--accent); padding:10px 14px; border-radius:0 8px 8px 0; font-size:.9rem; margin:10px 0;}
+  footer{background:var(--primary-dark); color:#cfd8e3; text-align:center; padding:22px 16px; font-size:.8rem;}
+  .yeartag{display:inline-block; border-radius:6px; color:#fff; font-size:.72rem; padding:2px 8px; margin-right:6px;}
+  .yeartag.j1{background:var(--j1);} .yeartag.j2{background:var(--j2);} .yeartag.j3{background:var(--j3);}
+  @media print{ nav{display:none;} details.ls{border:1px solid #ccc;} details.ls[open] summary{background:#eee;} }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>KI@Einhorn</h1>
+  <p>Arbeitsprozesse KI-gestützt gestalten · Wahlpflichtbereich Berufsschule (Baden-Württemberg)<br>
+  Kaufleute im Gesundheitswesen · Modellunternehmen der Einhorn-Gruppe</p>
+  <div class="badges">
+    <span class="badge">80 Stunden · 3 Lehrjahre</span>
+    <span class="badge">64 Std. Lernsituationen + 16 Std. Übung/LF</span>
+    <span class="badge">Bildungsplan ab 01.08.2026</span>
+    <span class="badge">Operatoren gem. KBS-Liste</span>
+  </div>
+</header>
+
+<nav>
+  <a href="#konzept">Konzept</a>
+  <a href="#unternehmen">Modellunternehmen</a>
+  <a href="#verlaufsplan">Verlaufsplan</a>
+  <a href="#stunden">Stundengliederung</a>
+  <a href="#lernsituationen">Lernsituationen</a>
+  <a href="#tools">Tools &amp; Medien</a>
+  <a href="#material">Schülermaterial</a>
+</nav>
+
+<main>
+
+<section id="konzept">
+  <h2>Rahmenkonzept</h2>
+  <p>Die Schülerinnen und Schüler arbeiten über drei Lehrjahre als <strong>Mitarbeitende des Wirtschafts- und
+  Verwaltungsdienstes der Einhorn-Unternehmensgruppe</strong> (Schwäbisch Gmünd) und sind Mitglieder der Projektgruppe
+  <strong>„KI@Einhorn“</strong> zur Erprobung von KI-Anwendungen in kaufmännischen Arbeitsprozessen. Sie durchlaufen dabei
+  die vollständige Handlung des Bildungsplans: <em>Analysieren – Planen – Entscheiden – Durchführen – Kontrollieren – Bewerten</em>.</p>
+  <div class="note"><strong>Didaktische Leitideen:</strong> selbstorganisiertes Lernen (Kann-Listen, Checkpoints,
+  Hilfekarten, Lernportfolio, Prompt-Protokolle), arbeitsteilige Teamarbeit an drei Modellunternehmen mit Ergebnisvergleich
+  im „Lenkungskreis“ (Plenum), Medienproduktion als Handlungsprodukt (Podcast, Audio-Pitch, Screencast, Videobotschaft).
+  Alle KI-Arbeiten erfolgen datenschutzkonform über <strong>fobizz/telli</strong> und ausschließlich mit fiktiven bzw.
+  anonymisierten Daten.</div>
+  <div class="grid three">
+    <div class="card"><h4>Lehrjahr 1 · 28 Std.</h4><p><span class="yeartag j1">J1</span>„KI verstehen – Potenziale und
+    Risiken im Gesundheitsbetrieb“ (LS01–LS03). Produkt: <strong>FAQ-Podcast „Einhorn fragt nach“</strong>.</p></div>
+    <div class="card"><h4>Lehrjahr 2 · 26 Std.</h4><p><span class="yeartag j2">J2</span>„KI-Einsatz planen, auswählen und
+    erproben“ (LS04–LS07a). Produkte: <strong>Audio-Pitch</strong> und <strong>Screencast „Unser KI-gestützter Prozess“</strong>.</p></div>
+    <div class="card"><h4>Lehrjahr 3 · 26 Std.</h4><p><span class="yeartag j3">J3</span>„KI-Ergebnisse prüfen, bewerten und
+    verantworten“ (LS07b–LS09). Produkt: <strong>Videobotschaft an die Geschäftsleitung</strong> („Einhorn-KI-Summit“).</p></div>
+  </div>
+</section>
+
+<section id="unternehmen">
+  <h2>Die Modellunternehmen &amp; Teams</h2>
+  <div class="grid three">
+    <div class="card company"><h4>Team Klinik</h4>
+      <p><strong>Einhorn Klinik GmbH</strong> – Akutkrankenhaus der Regelversorgung, 250 Planbetten, Trägerschaft
+      Landkreis Ostalbkreis. Fachrichtungen: Innere Medizin, Allgemeinchirurgie, Gynäkologie/Geburtshilfe, HNO.</p>
+      <p><em>Teamaufgabe ab LS04:</em> Standardkorrespondenz mit Kostenträgern (Kostenübernahmeanfragen, Verlängerungsanzeigen).</p></div>
+    <div class="card company"><h4>Team Reha</h4>
+      <p><strong>Einhorn Rehabilitation KG</strong> – Rehaklinik in Straßdorf; stationäre Vorsorge, Heilverfahren,
+      Anschlussheilbehandlungen (AHB).</p>
+      <p><em>Teamaufgabe ab LS04:</em> Verwaltungsteil von AHB- und Verlängerungsanträgen gegenüber DRV und Krankenkassen.</p></div>
+    <div class="card company"><h4>Team Residenz</h4>
+      <p><strong>Seniorenresidenz Einhorn KG</strong> – privatwirtschaftliches Pflegeheim für Dauer- und Kurzzeitpflege
+      mit Versorgungsvertrag der Pflegekassen.</p>
+      <p><em>Teamaufgabe ab LS04:</em> Angehörigenkommunikation und Informationsmaterial (Antwortschreiben, Info-Flyer Kurzzeitpflege).</p></div>
+  </div>
+</section>
+
+<section id="verlaufsplan">
+  <h2>Verlaufsplan über drei Lehrjahre</h2>
+  <table>
+    <tr><th>LS</th><th>Titel / Handlungsphase</th><th>Handlungsergebnis / Medienprodukt</th><th>Tools</th><th class="std">Std.</th></tr>
+    <tr class="year"><td colspan="5">Lehrjahr 1 – „KI verstehen – Potenziale und Risiken im Gesundheitsbetrieb“ (28 Std.)</td></tr>
+    <tr><td><strong>LS01</strong></td><td>Potenziale von KI im Gesundheitsbetrieb herausarbeiten · <em>Analysieren</em></td><td>Potenzial-/Anwendungsfall-Tabelle; Ist-Prozess als Flussdiagramm</td><td>Miro, N8N</td><td class="std">6</td></tr>
+    <tr><td><strong>LS02</strong></td><td>Geeignete Aufgabenstellungen identifizieren · <em>Analysieren/Beurteilen</em></td><td>Bewertungsraster; Beurteilung des Aufgabenpools</td><td>Miro</td><td class="std">4</td></tr>
+    <tr><td><strong>LS03</strong></td><td>Risiken des KI-Einsatzes dokumentieren · <em>Recherchieren/Dokumentieren</em></td><td>FAQ-Liste; <strong>FAQ-Podcast „Einhorn fragt nach“</strong></td><td>fobizz/telli, RODE Podcaster, iMovie, Canva</td><td class="std">14</td></tr>
+    <tr><td><strong>ÜL1</strong></td><td>Übung, Vertiefung, Leistungsfeststellung 1</td><td>Klassenarbeit; bewertete Podcast-Episode</td><td>–</td><td class="std">4</td></tr>
+    <tr class="year"><td colspan="5">Lehrjahr 2 – „KI-Einsatz planen, auswählen und erproben“ (26 Std.)</td></tr>
+    <tr><td><strong>LS04</strong></td><td>Einsatz einer KI-Anwendung planen · <em>Planen</em></td><td>Planungstabelle; Soll-Prozess-Workflow</td><td>Miro, N8N</td><td class="std">4</td></tr>
+    <tr><td><strong>LS05</strong></td><td>Entscheidung vorbereiten · <em>Planen/Bewerten</em></td><td>Gewichteter Kriterienkatalog</td><td>Miro, fobizz/telli</td><td class="std">6</td></tr>
+    <tr><td><strong>LS06</strong></td><td>KI-Anwendung auswählen · <em>Entscheiden</em></td><td>Vergleichstabelle; begründeter Vorschlag; <strong>90-Sek.-Audio-Pitch</strong></td><td>RODE Podcaster</td><td class="std">4</td></tr>
+    <tr><td><strong>LS07a</strong></td><td>KI-Anwendung einsetzen · <em>Durchführen</em></td><td>Prompt-Protokoll; dokumentierte Ausgaben; N8N-Workflow</td><td>fobizz/telli, N8N</td><td class="std">8</td></tr>
+    <tr><td><strong>ÜL2</strong></td><td>Übung, Leistungsfeststellung 2</td><td>Klassenarbeit; <strong>Screencast „Unser KI-gestützter Prozess“</strong></td><td>N8N, iMovie/Canva</td><td class="std">4</td></tr>
+    <tr class="year"><td colspan="5">Lehrjahr 3 – „KI-Ergebnisse prüfen, bewerten und verantworten“ (26 Std.)</td></tr>
+    <tr><td><strong>LS07b</strong></td><td>Eingaben iterativ optimieren · <em>Durchführen/Optimieren</em></td><td>Prompt-Iterationen; finale Ausgaben</td><td>fobizz/telli</td><td class="std">6</td></tr>
+    <tr><td><strong>LS08</strong></td><td>KI-Ausgaben prüfen · <em>Kontrollieren</em></td><td>Prüfprotokoll; Plan-Ist-Vergleich; <strong>rechtskonformer Flyer</strong></td><td>Canva</td><td class="std">8</td></tr>
+    <tr><td><strong>LS09</strong></td><td>KI-Einsatz evaluieren · <em>Bewerten/Reflektieren</em></td><td>Evaluationsbogen; Handlungsempfehlungen; Storyboard</td><td>Miro</td><td class="std">4</td></tr>
+    <tr><td><strong>ÜL3</strong></td><td>Abschlussproduktion + Leistungsfeststellung 3 · „Einhorn-KI-Summit“</td><td><strong>Videobotschaft an die Geschäftsleitung</strong>; Klassenarbeit/Portfolio</td><td>Videostudio, iMovie, Canva</td><td class="std">8</td></tr>
+    <tr class="sum"><td colspan="4">Gesamt (64 Std. Lernsituationen + 16 Std. Übung/Leistungsfeststellung)</td><td class="std">80</td></tr>
+  </table>
+  <p style="font-size:.82rem; color:var(--grey);">LS07 (14 Std. gem. Zielanalyse) ist auf Lehrjahr 2 (8 Std.) und
+  Lehrjahr 3 (6 Std.) aufgeteilt, um die Erprobung im Ausbildungsbetrieb (Lernortkooperation) zwischen den Lehrjahren zu nutzen.</p>
+</section>
+
+<section id="stunden">
+  <h2>Stundengliederung (Doppelstundenraster)</h2>
+
+  <h3><span class="yeartag j1">J1</span>Lehrjahr 1 (28 Std.)</h3>
+  <table>
+    <tr><th class="std">Std.</th><th>Inhalt und Phasen</th><th>Methoden / Medien / SOL</th></tr>
+    <tr><td class="std">1–2</td><td><strong>LS01</strong> · Projektauftakt „KI@Einhorn“, Unternehmensprofile, Teambildung, Brainstorming „Wo drückt der Schuh im Verwaltungsalltag?“</td><td>Miro; Kann-Liste; Lernportfolio anlegen</td></tr>
+    <tr><td class="std">3–4</td><td><strong>LS01</strong> · Potenziale von KI (Effizienz, Prozessoptimierung, Entscheidungsunterstützung) herausarbeiten</td><td>Gruppenarbeit; Checkpoint 1 (Ampel)</td></tr>
+    <tr><td class="std">5–6</td><td><strong>LS01</strong> · Anwendungsfälle ableiten; Ist-Prozess als Flussdiagramm; Galeriegang</td><td>N8N/Miro; Peer-Feedback</td></tr>
+    <tr><td class="std">7–8</td><td><strong>LS02</strong> · Unternehmensziele analysieren; Bewertungsraster entwickeln</td><td>Think-Pair-Share; Hilfekarten</td></tr>
+    <tr><td class="std">9–10</td><td><strong>LS02</strong> · Aufgabenpool beurteilen; Sonderfall Gesundheitsdaten (Art. 9 DSGVO)</td><td>Lenkungskreis; Portfolioeintrag</td></tr>
+    <tr><td class="std">11–12</td><td><strong>LS03</strong> · Bedenken von Betriebsrat &amp; Datenschutzbeauftragter; Fragen clustern; Rechercheplan</td><td>Miro; SOL-Arbeitsplan mit Meilensteinen</td></tr>
+    <tr><td class="std">13–14</td><td><strong>LS03</strong> · Recherche Recht I: DSGVO (Art. 9), Schweigepflicht, EU AI Act</td><td>fobizz/telli mit Quellenprüfung</td></tr>
+    <tr><td class="std">15–16</td><td><strong>LS03</strong> · Recherche Recht II: Urheberrecht, Geschäftsgeheimnisse, Kennzeichnung, Haftung</td><td>Expertengruppen; Checkpoint 2</td></tr>
+    <tr><td class="std">17–18</td><td><strong>LS03</strong> · Ethische Risiken (Bias, Black Box, Human-in-the-Loop, Ressourcen); <em>Differenzierung I1</em></td><td>Stationenlernen; BNE</td></tr>
+    <tr><td class="std">19–20</td><td><strong>LS03</strong> · FAQ-Liste finalisieren; Podcast-Skript, Rollen, Ablaufplan</td><td>Redaktionskonferenz; gemeinsames Bewertungsraster</td></tr>
+    <tr><td class="std">21–22</td><td><strong>LS03</strong> · Podcast-Aufnahme „Einhorn fragt nach“</td><td>RODE Podcaster</td></tr>
+    <tr><td class="std">23–24</td><td><strong>LS03</strong> · Postproduktion, Cover/Shownotes, Peer-Feedback, „Veröffentlichung“</td><td>iMovie, Canva; Feedbackbogen</td></tr>
+    <tr><td class="std">25–26</td><td><strong>Übung/Vertiefung</strong> · Wiederholung LS01–LS03, Quiz</td><td>SOL-Lerntheke</td></tr>
+    <tr><td class="std">27–28</td><td><strong>Leistungsfeststellung 1</strong> · Klassenarbeit; Rückgabe Podcast-Bewertung</td><td>Klassenarbeit; Kriterienraster</td></tr>
+  </table>
+
+  <h3><span class="yeartag j2">J2</span>Lehrjahr 2 (26 Std.)</h3>
+  <table>
+    <tr><th class="std">Std.</th><th>Inhalt und Phasen</th><th>Methoden / Medien / SOL</th></tr>
+    <tr><td class="std">1–2</td><td><strong>LS04</strong> · Teamaufgaben (Klinik: Kostenträger-Korrespondenz, Reha: AHB-Anträge, Residenz: Angehörigenkommunikation); Ist-Analyse, Ziele</td><td>Miro; SMART-Ziele; Kann-Liste J2</td></tr>
+    <tr><td class="std">3–4</td><td><strong>LS04</strong> · Planungstabelle; Soll-Prozess als Workflow</td><td>N8N; Checkpoint 1</td></tr>
+    <tr><td class="std">5–6</td><td><strong>LS05</strong> · Kriterien sammeln und ordnen (Passung, Kosten, Datenschutz, EU AI Act …)</td><td>Miro-Affinitätsdiagramm; FAQ-Liste (LS03)</td></tr>
+    <tr><td class="std">7–8</td><td><strong>LS05</strong> · Gewichtung im Team aushandeln und begründen</td><td>Moderierte Diskussion; Protokoll (Demokratiebildung)</td></tr>
+    <tr><td class="std">9–10</td><td><strong>LS05</strong> · KI-Anwendungen sichten; Katalog testen und überarbeiten; <em>Differenzierung I2</em></td><td>fobizz/telli; Produktdatenblätter</td></tr>
+    <tr><td class="std">11–12</td><td><strong>LS06</strong> · Vergleich per Nutzwertanalyse</td><td>Vergleichstabelle; Vier-Augen-Prinzip</td></tr>
+    <tr><td class="std">13–14</td><td><strong>LS06</strong> · Begründeter Vorschlag; 90-Sek.-Audio-Pitch; Entscheidung im Lenkungskreis</td><td>RODE Podcaster; Plenum als „Geschäftsleitung“</td></tr>
+    <tr><td class="std">15–16</td><td><strong>LS07a</strong> · Prompting-Grundlagen (Rolle–Kontext–Aufgabe–Format); erste Interaktionen</td><td>fobizz/telli; Prompt-Karten; nur fiktive Daten</td></tr>
+    <tr><td class="std">17–18</td><td><strong>LS07a</strong> · Aufgabenbearbeitung; Prompt-Protokoll führen</td><td>Protokoll-Vorlage; Checkpoint 2</td></tr>
+    <tr><td class="std">19–20</td><td><strong>LS07a</strong> · Iteration I: Ausgaben analysieren, Eingaben präzisieren</td><td>Fehlertypen-Hilfekarte</td></tr>
+    <tr><td class="std">21–22</td><td><strong>LS07a</strong> · Dokumentation; Automatisierungsidee als Workflow</td><td>N8N; Doku-Vorlage</td></tr>
+    <tr><td class="std">23–24</td><td><strong>LF 2 (praktisch)</strong> · Screencast „Unser KI-gestützter Prozess“</td><td>Screencast, iMovie/Canva; Bewertungsraster</td></tr>
+    <tr><td class="std">25–26</td><td><strong>Übung + LF 2 (schriftlich)</strong> · Klassenarbeit LS04–LS07a</td><td>SOL-Lerntheke; Klassenarbeit</td></tr>
+  </table>
+
+  <h3><span class="yeartag j3">J3</span>Lehrjahr 3 (26 Std.)</h3>
+  <table>
+    <tr><th class="std">Std.</th><th>Inhalt und Phasen</th><th>Methoden / Medien / SOL</th></tr>
+    <tr><td class="std">1–2</td><td><strong>LS07b</strong> · Ausgaben aus J2 und betriebliche Erfahrungen auswerten (Lernortkooperation)</td><td>Portfolio-Review; Miro-Retrospektive</td></tr>
+    <tr><td class="std">3–4</td><td><strong>LS07b</strong> · Iteration II: Few-Shot, Prompt-Ketten, Systemprompts</td><td>fobizz/telli; Prompt-Bibliothek</td></tr>
+    <tr><td class="std">5–6</td><td><strong>LS07b</strong> · Finale Ausgaben dokumentieren; BNE: Wann lohnt KI – wann nicht?</td><td>Doku-Vorlage; BNE-Impulsfragen</td></tr>
+    <tr><td class="std">7–8</td><td><strong>LS08</strong> · Konfliktfall „kritische Kollegin“; Checkliste zur Prüfung von KI-Ausgaben</td><td>Rollenspiel; Checklisten-Entwicklung</td></tr>
+    <tr><td class="std">9–10</td><td><strong>LS08</strong> · Ausgaben systematisch prüfen; Faktencheck mit Fachquellen</td><td>Checkliste; Vier-Augen-Prinzip; Prüfprotokoll</td></tr>
+    <tr><td class="std">11–12</td><td><strong>LS08</strong> · Rechtsprüfung am Fall: KI-Flyer der Seniorenresidenz; rechtskonforme Fassung gestalten</td><td>Canva; Rechtstexte</td></tr>
+    <tr><td class="std">13–14</td><td><strong>LS08</strong> · Plan-Ist-Vergleich mit Planungstabelle (LS04)</td><td>Checkpoint 2; Portfolioeintrag</td></tr>
+    <tr><td class="std">15–16</td><td><strong>LS09</strong> · Evaluationsbogen; Nutzen und Grenzen reflektieren</td><td>Placemat/stille Diskussion</td></tr>
+    <tr><td class="std">17–18</td><td><strong>LS09</strong> · Drei Handlungsempfehlungen; Storyboard Videobotschaft</td><td>Miro-Storyboard; Videokriterien</td></tr>
+    <tr><td class="std">19–20</td><td><strong>Abschlussproduktion I</strong> · Aufnahme im Videostudio</td><td>Videostudio, RODE (Ton); Drehplan, Rollen</td></tr>
+    <tr><td class="std">21–22</td><td><strong>Abschlussproduktion II</strong> · Schnitt, Bauchbinden, KI-Kennzeichnung</td><td>iMovie, Canva</td></tr>
+    <tr><td class="std">23–24</td><td><strong>„Einhorn-KI-Summit“</strong> · Premiere und Präsentation vor der „Geschäftsleitung“</td><td>Feedbackbögen; Bewertungsraster</td></tr>
+    <tr><td class="std">25–26</td><td><strong>Leistungsfeststellung 3</strong> · Klassenarbeit/Portfolio; Lernbilanz (Kann-Listen)</td><td>Portfolio; Abschlussreflexion</td></tr>
+  </table>
+</section>
+
+<section id="lernsituationen">
+  <h2>Lernsituationen LS01–LS09</h2>
+  <p>Alle Arbeitsaufträge beginnen mit einem Operator der KBS-Operatorenliste und enthalten jeweils genau einen Operator.
+  Mit * gekennzeichnete Verben (gewichten, interagieren, präsentieren) fordern zu praktischen, berufstypischen Handlungen
+  auf (analog Zielanalyse ZSL).</p>
+
+  <details class="ls j1" open>
+    <summary><span><span class="yeartag j1">J1</span>LS01 · Potenziale von KI im Gesundheitsbetrieb herausarbeiten</span><span class="meta">6 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Auf der Mitarbeiterversammlung stellt die Geschäftsleitung das Projekt „KI@Einhorn“ vor. In den Verwaltungen aller
+      drei Häuser herrscht Arbeitsverdichtung: Abrechnungen mit Kostenträgern stapeln sich, Standardschriftverkehr bindet Zeit.
+      Einige Kolleginnen und Kollegen erhoffen sich Entlastung, andere befürchten Qualitätsverluste und Kontrollaufwand.
+      Ihr Team soll für sein Haus herausarbeiten, wo KI Potenzial hat.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Arbeiten</span> Sie aus den Materialien die Potenziale von KI für die betrieblichen
+        Arbeitsprozesse Ihres Modellunternehmens <span class="op">heraus</span>. <em>(Miro-Board)</em></li>
+        <li><span class="op">Leiten</span> Sie aus den Potenzialen allgemeine Anwendungsfälle für die Nutzung von
+        KI-Anwendungen <span class="op">ab</span>. <em>(Tabelle)</em></li>
+        <li><span class="op">Stellen</span> Sie einen typischen kaufmännischen Arbeitsprozess Ihres Hauses als
+        Flussdiagramm <span class="op">dar</span> und markieren Sie mögliche KI-Unterstützungspunkte. <em>(N8N oder Miro)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5>
+      <p>Potenzial-/Anwendungsfall-Tabelle je Modellunternehmen; Prozessdarstellung mit KI-Unterstützungspunkten.</p>
+      <h5>Datenkranz</h5>
+      <p>Unternehmensprofile; Tätigkeitslisten des Wirtschafts- und Verwaltungsdienstes; Informationstext zu Effizienzsteigerung,
+      Prozessoptimierung, Entscheidungsunterstützung; O-Töne aus dem Kollegium.</p>
+      <div class="tools"><span class="tool">Miro</span><span class="tool">N8N</span></div>
+      <div class="hint"><strong>SOL &amp; Hinweise:</strong> Kann-Liste und Lernportfolio werden eingeführt; Checkpoint mit
+      Ampelabfrage; Galeriegang mit Peer-Feedback. Die O-Töne (Hoffnungen/Befürchtungen) werden in LS09 wieder aufgegriffen.</div>
+    </div>
+  </details>
+
+  <details class="ls j1">
+    <summary><span><span class="yeartag j1">J1</span>LS02 · Geeignete Aufgabenstellungen für KI identifizieren</span><span class="meta">4 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Vorgabe der Geschäftsleitung: Jede Maßnahme muss zu Zeitersparnis, Qualitätsverbesserung oder Mitarbeiterentlastung
+      beitragen. Die Aufgaben im Haus sind sehr unterschiedlich – zeitintensive Routinen, Texte mit Qualitätsanspruch und
+      Aufgaben mit besonders geschützten Gesundheitsdaten. Ihr Team entwickelt ein transparentes Entscheidungsverfahren.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Entwickeln</span> Sie ein Bewertungsraster, mit dem beurteilt werden kann, ob sich
+        Aufgabenstellungen Ihres Modellunternehmens für eine KI-gestützte Bearbeitung eignen.</li>
+        <li><span class="op">Beurteilen</span> Sie die vorliegenden Aufgabenstellungen aus Ihrem Haus anhand des Rasters.</li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Bewertungsraster; begründete Beurteilung des Aufgabenpools.</p>
+      <h5>Datenkranz</h5>
+      <p>Aufgabenpool je Haus – z. B. Klinik: Standardantworten auf Kostenübernahmeanfragen (Routine), Qualitätsbericht
+      (Qualitätsanspruch); Reha: Terminkoordination mit Kostenträgern (Koordinationsaufwand); Residenz:
+      Angehörigen-Newsletter (kreative Offenheit), Pflegegrad-Dokumentation (Gesundheitsdaten!), Beschwerdegespräch
+      (menschliche Bewertung zwingend).</p>
+      <div class="tools"><span class="tool">Miro</span></div>
+      <div class="hint"><strong>Hinweise:</strong> Demokratiebildung (transparente Kriterien, begründetes Abwägen);
+      Problematisierung Art. 9 DSGVO als Vorgriff auf LS03.</div>
+    </div>
+  </details>
+
+  <details class="ls j1">
+    <summary><span><span class="yeartag j1">J1</span>LS03 · Risiken dokumentieren – FAQ-Podcast „Einhorn fragt nach“</span><span class="meta">14 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Kurz vor der Testphase melden sich Betriebsrat und Datenschutzbeauftragte: Dürfen echte Daten von Patientinnen,
+      Rehabilitanden und Bewohnern verwendet werden? Wer haftet bei fehlerhaften Ausgaben an eine Krankenkasse? Die
+      Projektgruppe soll die Fragen fundiert beantworten – als interne Podcast-Episode für das Mitarbeiterportal.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Erstellen</span> Sie eine FAQ-Liste mit Antworten auf die rechtlichen und ethischen Fragen zum
+        KI-Einsatz in Ihrem Modellunternehmen. <em>(KI-gestützte Recherche mit Quellenprüfung)</em></li>
+        <li><span class="op">Gestalten</span> Sie auf Grundlage Ihrer FAQ-Liste eine Podcast-Episode „Einhorn fragt nach“
+        für das Mitarbeiterportal. <em>(Skript, Aufnahme, Postproduktion, Cover/Shownotes)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>FAQ-Liste; Podcast-Episode (8–12 Min.) mit Cover und Shownotes.</p>
+      <h5>Datenkranz</h5>
+      <p>Fragenkatalog (rechtlich/ethisch); Auszüge DSGVO (inkl. Art. 9), EU AI Act, Urheberrecht; Hinweise zur
+      Schweigepflicht; Skriptvorlage; Qualitätskriterien Podcast.</p>
+      <div class="tools"><span class="tool">fobizz/telli</span><span class="tool">RODE Podcaster</span><span class="tool">iMovie</span><span class="tool">Canva</span><span class="tool">Miro</span></div>
+      <div class="hint"><strong>Differenzierung Impuls I1:</strong> Leistungsstarke erläutern im Podcast zusätzlich die
+      Funktionsweise maschinellen Lernens (Trainingsdaten, Bias, Black Box, Halluzinationen, Train to please).
+      BNE + Demokratiebildung.</div>
+    </div>
+  </details>
+
+  <details class="ls j2">
+    <summary><span><span class="yeartag j2">J2</span>LS04 · Einsatz einer KI-Anwendung planen</span><span class="meta">4 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Die Testphase startet. Jedes Team übernimmt eine wiederkehrende, zeitintensive Verwaltungsaufgabe seines Hauses
+      (Klinik: Kostenträger-Korrespondenz; Reha: AHB-/Verlängerungsanträge; Residenz: Angehörigenkommunikation und
+      Informationsmaterial). Die Geschäftsleitung verlangt vor der Einführung eine saubere Planung.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Erstellen</span> Sie eine Planungstabelle für die Einführung der KI-Anwendung
+        (Ist-Analyse, Ziele, Ressourcen, technische Voraussetzungen, Schnittstellen).</li>
+        <li><span class="op">Stellen</span> Sie den geplanten KI-gestützten Soll-Prozess als Workflow <span class="op">dar</span>. <em>(N8N)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Planungstabelle; Soll-Prozess-Workflow.</p>
+      <div class="tools"><span class="tool">Miro</span><span class="tool">N8N</span></div>
+      <div class="hint"><strong>Hinweis:</strong> Die Planungstabelle ist Referenz für den Plan-Ist-Vergleich in LS08.</div>
+    </div>
+  </details>
+
+  <details class="ls j2">
+    <summary><span><span class="yeartag j2">J2</span>LS05 · Entscheidung für eine KI-Anwendung vorbereiten</span><span class="meta">6 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Mehrere KI-Anwendungen kommen infrage (Modelle in fobizz/telli, weitere Anbieter); sie unterscheiden sich deutlich
+      in Funktionsumfang, Kosten, Bedienbarkeit und Datenschutz. Die Geschäftsleitung erwartet eine nachvollziehbare
+      Entscheidungsvorlage – im Gesundheitswesen darf die Auswahl nicht „aus dem Bauch“ erfolgen.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Entwickeln</span> Sie einen Kriterienkatalog zur Bewertung von KI-Anwendungen für Ihre
+        Teamaufgabe (Passung, Funktionsumfang, Kosten, Integrationsaufwand, Kompatibilität, Benutzerfreundlichkeit,
+        Datenschutz, EU AI Act).</li>
+        <li><span class="op">Gewichten*</span> Sie die Kriterien für den Einsatz in Ihrem Modellunternehmen und begründen
+        Sie die Gewichtung. <em>(Aushandlungsprotokoll)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Kriterienkatalog; gewichteter Kriterienkatalog mit Begründung.</p>
+      <div class="tools"><span class="tool">Miro</span><span class="tool">fobizz/telli</span></div>
+      <div class="hint"><strong>Differenzierung Impuls I2:</strong> Arten von KI-Systemen (regelbasiert, prädiktiv, generativ)
+      differenzieren und ihre Eignung beurteilen. Demokratiebildung: Gewichtung wird im Team ausgehandelt.</div>
+    </div>
+  </details>
+
+  <details class="ls j2">
+    <summary><span><span class="yeartag j2">J2</span>LS06 · KI-Anwendung auswählen</span><span class="meta">4 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Der Lenkungskreis tagt: Bis Monatsende muss je Haus die Entscheidung fallen. Ihre Vorlage soll die
+      Geschäftsleitung in maximal 90 Sekunden überzeugen.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Vergleichen</span> Sie die KI-Anwendungen anhand Ihres gewichteten Kriterienkatalogs in einer
+        Tabelle. <em>(Nutzwertanalyse)</em></li>
+        <li><span class="op">Schlagen</span> Sie der Geschäftsleitung begründet eine KI-Anwendung <span class="op">vor</span>.</li>
+        <li><span class="op">Präsentieren*</span> Sie Ihren Vorschlag als 90-Sekunden-Audio-Pitch im Lenkungskreis.</li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Vergleichstabelle; Entscheidungsvorlage; Audio-Pitch.</p>
+      <div class="tools"><span class="tool">RODE Podcaster</span></div>
+      <div class="hint"><strong>Hinweis:</strong> Entscheidung im Plenum auf Basis offengelegter Kriterien (Demokratiebildung);
+      Vier-Augen-Prinzip zwischen den Teams.</div>
+    </div>
+  </details>
+
+  <details class="ls j2">
+    <summary><span><span class="yeartag j2">J2</span>LS07a · KI-Anwendung einsetzen</span><span class="meta">8 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Die Erprobung beginnt – doch die ersten Ausgaben sind teils ungenau, unvollständig oder treffen den Ton gegenüber
+      Kostenträgern bzw. Angehörigen nicht. Betriebliche Vorgaben: nur fiktive/anonymisierte Daten, lückenlose Dokumentation.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Interagieren*</span> Sie mit der KI-Anwendung zur Bearbeitung Ihrer Teamaufgabe und
+        präzisieren Sie Ihre Eingaben schrittweise. <em>(Prompt-Protokoll)</em></li>
+        <li><span class="op">Dokumentieren</span> Sie Ihr Vorgehen und die Ausgaben unter Einhaltung der betrieblichen Vorgaben.</li>
+        <li><span class="op">Stellen</span> Sie <span class="op">dar</span>, wie der erprobte Arbeitsschritt in einen
+        automatisierten Workflow eingebettet werden könnte. <em>(N8N)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Prompt-Protokoll; dokumentierte optimierte Ausgaben; N8N-Workflow-Skizze.</p>
+      <div class="tools"><span class="tool">fobizz/telli</span><span class="tool">N8N</span></div>
+      <div class="hint"><strong>Hinweis:</strong> Fortsetzung als LS07b in Lehrjahr 3 – dazwischen Erprobung im
+      Ausbildungsbetrieb (Lernortkooperation). BNE: bewusster Umgang mit Prompts.</div>
+    </div>
+  </details>
+
+  <details class="ls j3">
+    <summary><span><span class="yeartag j3">J3</span>LS07b · Eingaben iterativ optimieren</span><span class="meta">6 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Zwischenbilanz im Lenkungskreis: Die Ausgaben sind besser, aber noch nicht verlässlich genug für den Regelbetrieb.
+      Die Geschäftsleitung fordert systematische Optimierung – und fragt zugleich: „Nicht jede E-Mail braucht ein
+      Sprachmodell“ – wo lohnt der KI-Einsatz wirklich?</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Interagieren*</span> Sie erneut mit der KI-Anwendung und optimieren Sie Ihre Eingaben iterativ
+        mit fortgeschrittenen Prompting-Techniken (Few-Shot, Prompt-Ketten, Systemprompts).</li>
+        <li><span class="op">Dokumentieren</span> Sie Ihre Optimierungsschritte und die finalen Ausgaben.</li>
+        <li><span class="op">Beurteilen</span> Sie, für welche Teilaufgaben sich der KI-Einsatz unter
+        Ressourcen-Gesichtspunkten lohnt. <em>(BNE)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Dokumentierte Iterationen; finale Ausgaben; begründete BNE-Einschätzung.</p>
+      <div class="tools"><span class="tool">fobizz/telli</span><span class="tool">Miro</span></div>
+      <div class="hint"><strong>Hinweis:</strong> Lernortkooperation – betriebliche Erfahrungen und Ausgaben werden im
+      Unterricht eingebunden; Portfolio-Review als Wiedereinstieg.</div>
+    </div>
+  </details>
+
+  <details class="ls j3">
+    <summary><span><span class="yeartag j3">J3</span>LS08 · KI-Ausgaben prüfen</span><span class="meta">8 Std.</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Eine erfahrene Kollegin hält Ihre Ergebnisse für sachlich fehlerhaft, rechtlich angreifbar und am Ziel vorbei.
+      Konkreter Anlass: Ein KI-generierter Werbeflyer der Seniorenresidenz für die Kurzzeitpflege – ohne Impressum, ohne
+      Kennzeichnung der KI-Bilder, mit zweifelhafter Leistungsaussage. Die Geschäftsleitung stoppt die Verteilung und
+      beauftragt eine systematische Prüfung aller KI-Ausgaben.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Prüfen</span> Sie die Ausgaben Ihres Teams mit Hilfe der Checkliste (sachliche Richtigkeit,
+        Plausibilität, ethische Unbedenklichkeit, Zielgruppengerechtigkeit, rechtliche Vorgaben).</li>
+        <li><span class="op">Vergleichen</span> Sie Ihre geprüften Ausgaben mit den Zielen Ihrer Planungstabelle aus LS04.
+        <em>(Plan-Ist-Vergleich)</em></li>
+        <li><span class="op">Gestalten</span> Sie eine rechtskonforme, zielgruppengerechte Fassung des beanstandeten
+        Flyers. <em>(Canva)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Prüfprotokoll; Plan-Ist-Vergleich; überarbeiteter Flyer.</p>
+      <div class="tools"><span class="tool">Canva</span></div>
+      <div class="hint"><strong>Hinweis:</strong> Demokratiebildung – Urteils- und Kritikfähigkeit, Perspektivwechsel;
+      der Flyer-Fall wird teamübergreifend geprüft (Vier-Augen-Prinzip).</div>
+    </div>
+  </details>
+
+  <details class="ls j3">
+    <summary><span><span class="yeartag j3">J3</span>LS09 · KI-Einsatz evaluieren – Videobotschaft</span><span class="meta">4 Std. (+8 Std. ÜL3)</span></summary>
+    <div class="ls-body">
+      <h5>Ausgangssituation</h5>
+      <p>Das Projekt ist abgeschlossen. Die Geschäftsleitung möchte auf Basis der Ergebnisse entscheiden, wie künftig mit
+      KI verfahren wird – und wünscht sich statt einer klassischen Präsentation eine professionelle Videobotschaft je Team,
+      produziert im Videostudio, Premiere beim „Einhorn-KI-Summit“.</p>
+      <h5>Arbeitsaufträge</h5>
+      <ol>
+        <li><span class="op">Bewerten</span> Sie Ihren Arbeitsprozess mit Hilfe des Evaluationsbogens (Zeitersparnis,
+        Qualitätsverbesserung, Mitarbeiterentlastung).</li>
+        <li><span class="op">Formulieren</span> Sie drei Handlungsempfehlungen für den zukünftigen Einsatz von
+        KI-Anwendungen in Ihrem Modellunternehmen.</li>
+        <li><span class="op">Präsentieren*</span> Sie Ihre Handlungsempfehlungen der Geschäftsleitung als Videobotschaft.
+        <em>(Storyboard → Videostudio → Postproduktion → Premiere)</em></li>
+      </ol>
+      <h5>Handlungsergebnisse</h5><p>Evaluationsbogen; drei Handlungsempfehlungen; Videobotschaft (3–5 Min.).</p>
+      <div class="tools"><span class="tool">Miro</span><span class="tool">Videostudio</span><span class="tool">RODE Podcaster</span><span class="tool">iMovie</span><span class="tool">Canva</span></div>
+      <div class="hint"><strong>Hinweis:</strong> Rückbezug auf die O-Töne aus LS01 (Was hat sich bestätigt?);
+      Kennzeichnung KI-generierter Inhalte im Video; abschließender Kann-Listen-Abgleich als Lernbilanz.</div>
+    </div>
+  </details>
+</section>
+
+<section id="tools">
+  <h2>Tools &amp; Medien im Überblick</h2>
+  <div class="grid three">
+    <div class="card"><h4>Miro</h4><p>Grundsätzlich für alle Brainstormings: Potenzialsammlung, Kriterien, Fragen-Clustering, Retrospektiven, Storyboards.</p></div>
+    <div class="card"><h4>fobizz / telli</h4><p>Datenschutzkonforme KI-Umgebung für Recherche, Prompting und Modellvergleich – ausschließlich mit fiktiven/anonymisierten Daten.</p></div>
+    <div class="card"><h4>N8N</h4><p>Abbildung und Darstellung von Ist- und Soll-Prozessen sowie Automatisierungsideen als Workflow.</p></div>
+    <div class="card"><h4>RODE Podcaster</h4><p>Audioproduktion: FAQ-Podcast (LS03), 90-Sek.-Pitch (LS06), Ton der Videoproduktion (LS09).</p></div>
+    <div class="card"><h4>Videostudio + iMovie</h4><p>Videoproduktion und Postproduktion: Screencast (ÜL2), Videobotschaft an die Geschäftsleitung (LS09/ÜL3).</p></div>
+    <div class="card"><h4>Canva</h4><p>Gestaltung von Flyern und Ausdrucken für die Modellunternehmen, Podcast-Cover, Shownotes, Bauchbinden, Thumbnails.</p></div>
+  </div>
+</section>
+
+<section id="material">
+  <h2>Schülermaterial (Downloads)</h2>
+  <p>Die Materialpakete liegen als PDF im selben Ordner wie diese Seite:</p>
+  <div class="grid three">
+    <div class="card"><h4><span class="yeartag j1">J1</span>Materialpaket Lehrjahr 1</h4>
+      <p>M1.1–M1.9: Projektauftrag, Tätigkeitslisten, KI-Infotext, O-Töne, Aufgabenpool, Fragenkatalog
+      Betriebsrat/Datenschutz, Podcast-Skriptvorlage, Bewertungsraster Podcast, Kann-Liste.</p>
+      <p><a href="04_Schuelermaterial_Lehrjahr1.pdf">04_Schuelermaterial_Lehrjahr1.pdf</a></p></div>
+    <div class="card"><h4><span class="yeartag j2">J2</span>Materialpaket Lehrjahr 2</h4>
+      <p>M2.1–M2.11: Teamaufgaben, Planungstabelle, Datenblätter dreier KI-Anwendungen, Nutzwertanalyse,
+      Pitch-Kriterien, RKAFB-Prompting, Prompt-Protokoll, KI-Richtlinie, fiktive Falldaten, Screencast-Raster, Kann-Liste.</p>
+      <p><a href="05_Schuelermaterial_Lehrjahr2.pdf">05_Schuelermaterial_Lehrjahr2.pdf</a></p></div>
+    <div class="card"><h4><span class="yeartag j3">J3</span>Materialpaket Lehrjahr 3</h4>
+      <p>M3.1–M3.9: Zwischenbilanz-Memo, fortgeschrittenes Prompting, Prüf-Checkliste, <strong>beanstandeter
+      KI-Flyer (Prüffall)</strong>, Zielgruppen, Evaluationsbogen, Storyboard/Drehplan, Feedbackbogen, Kann-Liste.</p>
+      <p><a href="06_Schuelermaterial_Lehrjahr3.pdf">06_Schuelermaterial_Lehrjahr3.pdf</a></p></div>
+  </div>
+  <div class="note"><strong>Editierbare Word-Fassungen:</strong> Alle Materialien liegen zusätzlich als einzelne
+  .docx-Dateien im Unterordner <strong>„Word-Materialien"</strong> (je Lehrjahr ein Ordner, z. B.
+  <a href="Word-Materialien/Lehrjahr 1/M1.1 Projektauftrag der Geschäftsleitung.docx">M1.1 Projektauftrag</a>) –
+  ideal zum Anpassen an die eigene Klasse.</div>
+  <p style="font-size:.82rem; color:var(--grey);">Weitere Planungsdokumente: <a href="01_Verlaufsplan_und_Stundengliederung.pdf">Verlaufsplan &amp; Stundengliederung</a> ·
+  <a href="02_Lernsituationen_LS01-LS09.pdf">Lernsituationen LS01–LS09</a></p>
+</section>
+
+</main>
+
+<footer>
+  Quellen: Bildungsplan „Arbeitsprozesse KI-gestützt gestalten“ (Wahlpflichtbereich Berufsschule BW, Inkraftsetzung 01.08.2026) ·
+  Zielanalyse ZSL (Stand Juni 2026) · Operatorenliste der Koordinierungsstelle für Abschlussprüfungen von Berufsschule und
+  Wirtschaft (KBS) · Modellunternehmen Einhorn-Gruppe (BFK)
+</footer>
+
+</body>
+</html>
